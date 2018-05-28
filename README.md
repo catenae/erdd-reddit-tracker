@@ -1,2 +1,2 @@
-# reddit-user-tracker
+# erdd-reddit-tracker
 TO-DO
