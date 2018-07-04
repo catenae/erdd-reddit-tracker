@@ -121,9 +121,16 @@ class UserContentCrawler(Link):
                     self._priority_count(priority_counters, retrieved_posts,
                                          start_timestamp, submission_timestamp)
 
-                    submission = rch.get_submission_elements(self.spider_name,
-                                                             subreddit_id,
-                                                             submission_id)[0]
+                    try:
+                        submission = rch.get_submission_elements(self.spider_name,
+                                                                 subreddit_id,
+                                                                 submission_id)[0]
+                    except IndexError:
+                        # Sometimes the prefix 'u_' is needed for the username
+                        submission = rch.get_submission_elements(self.spider_name,
+                                                                 'u_' + subreddit_id,
+                                                                 submission_id)[0]
+
                     submission_title = rch.get_submission_title(submission)
                     submission_body = rch.get_submission_body(submission)
 
