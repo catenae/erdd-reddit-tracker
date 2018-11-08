@@ -61,10 +61,9 @@ class UserContentCrawler(Link):
             queue_multiplier = 1
 
             try:
-                probability = self.aerospike.get(
-                    user_id,
-                    'test',
-                    'aggregated_probabilities')
+                _, probability = self.aerospike.get(user_id,
+                                                    'test',
+                                                    'aggregated_probabilities')
                 if probability:
                     # The depression probability is inverted (higher queue
                     # number means less important)
@@ -91,16 +90,14 @@ class UserContentCrawler(Link):
                         queue_adder = 1
 
                 # LAST SUBMISSION FOR THE CURRENT USER
-                last_submission = self.aerospike.get(
-                    user_id,
-                    'test',
-                    'last_submissions')
+                _, last_submission = self.aerospike.get(user_id,
+                                                        'test',
+                                                        'last_submissions')
 
                 # LAST COMMENT FOR THE CURRENT USER
-                last_comment = self.aerospike.get(
-                    user_id,
-                    'test',
-                    'last_comments')
+                _, last_comment = self.aerospike.get(user_id,
+                                                     'test',
+                                                     'last_comments')
 
             except:
                 util.print_fatal(self, "Unhandled exception...")

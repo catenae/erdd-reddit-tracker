@@ -21,10 +21,9 @@ class CommentCrawler(Link):
     def _emit_retrieved(self, user_id):
         if user_id not in self.user_buffer_set:
             self.user_buffer_set.add(user_id)
-            self.queue.put(
-                Electron(user_id,
-                         user_id,
-                         topic=self.output_topics[0]))
+            self.send(Electron(user_id,
+                               user_id,
+                               topic=self.output_topics[0]))
 
     def custom_input(self):
         running = True

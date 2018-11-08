@@ -4,6 +4,7 @@
 from catenae import Link, Electron, util
 from pymongo import MongoClient
 from conf import conf_loader as conf
+import logging
 
 
 class NewUserFilter(Link):
@@ -18,26 +19,12 @@ class NewUserFilter(Link):
 
     def transform(self, electron):
         try:
-            if not self.aerospike.exists(
-                electron.value,
-                'test',
-                'known_users'):
-
-                # print(f"[ACCEPTED] ({electron.value})")
-                self.aerospike.put(electron.value,
-                                               None,
-                                               'test',
-                                               'known_users')
-                self.users.update_one(
-                    {'nickname': electron.value},
-                    {'$set': {'nickname': electron.value}},
-                    upsert=True)
-
+            if not self.aerospike.exists(electron.value, 'test', 'known_users'):
+                self.aerospike.put(electron.value, None, 'test', 'known_users')
+                self.users.update_one({'nickname': electron.value},
+                                      {'$set': {'nickname': electron.value}},
+                                      upsert=True)
                 return electron
-
-            else:
-                pass
-                # print(f"[IGNORED] ({electron.value})")
 
         except Exception as e:
             self.aerospike.close_connection()
